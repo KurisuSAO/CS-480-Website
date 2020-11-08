@@ -5,14 +5,30 @@
 /* REMOVE ME - dashed lines and height for debugging */
 #leftColumn {
   outline: 1px dashed orange; 
-  height: 600px;
+  height: 800px;
+  
+  margin: auto;
+}
+
+#profileInfo{
+  background-color: salmon;
+  align-items: center;
+  
+  height:100vh;
+  padding: 25px;
+  margin: automatic;
+
+}
+#profileBody{
   align-items: center;
   justify-content: center;
-  margin: auto;
   text-align: center;
 }
 #btnList{
-  background-color: salmon;
+  background-color: lightseagreen;
+  color: white;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Your css code here! */
