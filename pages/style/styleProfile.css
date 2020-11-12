@@ -3,32 +3,51 @@
  */
 
 /* REMOVE ME - dashed lines and height for debugging */
-#leftColumn {
-  outline: 1px dashed orange; 
-  height: 800px;
-  
-  margin: auto;
+#fullPage{
+  display: flex;
+  position: relative;
 }
-
-#profileInfo{
+#sidebar {
+  position: fixed;
+  width: 250px;
+  height: 100%;
   background-color: salmon;
-  align-items: center;
-  
-  height:100vh;
-  padding: 25px;
-  margin: automatic;
+  border: 10px solid darksalmon;
+  opacity: 0.9;
+  padding-top: 30px;
+}
+
+#statsContent{
+  width: 100%;
+  position: absolute;
+  padding: 15px;
+  padding-left: 250px;
+}
+
+.sidebar-nav{
+  padding: 0;
+  list-style: none;
 
 }
-#profileBody{
-  align-items: center;
-  justify-content: center;
+
+.sidebar-nav li{
   text-align: center;
+  line-height: 40px;
 }
+
+/*.sidebar-nav li a{
+  text-decoration: none;
+  color: blue;
+}*/
+
 #btnList{
   background-color: lightseagreen;
   color: white;
   align-items: center;
   justify-content: center;
 }
+
+
+
 
 /* Your css code here! */
