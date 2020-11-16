@@ -7,7 +7,7 @@
     <link rel="stylesheet" href=
   "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.css">
 
-    <link rel="stylesheet" href="style/styleLogin.css">
+    <link rel="stylesheet" href="styleLogin.css">
 
 
     <!-- Load any supplemental Javascript libraries here -->
@@ -70,10 +70,33 @@
       
       //Event Handlers
       document.getElementById("btnSignUp").addEventListener("click", function(){
-        
+        //add user to database
+        var userName = document.getElementById("userName").value;
+        var password = document.getElementById("userPassword1").value;
+      
+        var input = {u: userName, p: password};
+        $.ajax({
+          type: 'POST',
+          url: '/pages/signup.html',
+          data: input,
+          success: function(data){
+            //do something
+            if(data == -999){
+              alert("Username already taken");
+              location.reload();
+            }
+            else{
+              sessionStorage.setItem("curUser", userName);
+              sessionStorage.setItem("curID", data);
+              window.location.href = "/profile.html" 
+            }
+            
+            
+          }
+        });
       });
       document.getElementById("btnCancel").addEventListener("click", function(){
-        window.location.href = "../index.html" 
+        window.location.href = "/" 
       });
   </script>
 </html>
