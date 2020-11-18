@@ -46,6 +46,18 @@
   align-items: center;
   justify-content: center;
 }
+.row{
+  padding: 5px;
+}
+.card-header{
+  text-align: center;
+  background-color: lightseagreen;
+  color: white;
+}
+.card-body{
+  text-align: center;
+
+}
 
 
 

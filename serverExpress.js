@@ -5,8 +5,11 @@ var path = require('path')
 //query strings
 var loginQuery = 'CALL loginInfo(?,?)';
 var signupQuery = 'CALL signupAccount(?,?)';
+var getDaysQuery = 'CALL getDays(?)';
+var getTotalShowsQuery = 'CALL getTotalShows(?)';
+var getTotalEpisodesQuery = 'CALL getTotalEpisodes(?)';
+var getYearGraphQuery = 'CALL getYearGraph(?)';
 
-//var runQuery = require('./runthis.js')
 const {twoVar, oneVar} = require('./runthis.js');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({extended: false});
@@ -50,7 +53,7 @@ app.post('/', urlencodedParser, async function(req, res) {
   res.send(result); 
 }); 
 //used to sign up for a new account
-app.post('/pages/signup.html', urlencodedParser, async function(req, res) { 
+app.post('/signup.html', urlencodedParser, async function(req, res) { 
   console.log(req.body);
   var u = (req.body.u); 
   var p = (req.body.p); 
@@ -59,12 +62,19 @@ app.post('/pages/signup.html', urlencodedParser, async function(req, res) {
   console.log(result);
   res.send(result); 
 }); 
-  
+//used to get Stats
+app.post('/profile.html/days', urlencodedParser, async function(req, res) { 
+  var curID = (req.body.id); 
 
-// app.get('/db', async function (req, res) {
-// 	var result = await runQuery.buildPromise('Chris27153', 248778)
-// 	res.send(result) 
-// })
+  var days = await oneVar(curID, getDaysQuery);
+  var eps = await oneVar(curID, getTotalEpisodesQuery);
+  var shows = await oneVar(curID, getTotalShowsQuery);
+  var yearGraph = await oneVar(curID, getYearGraphQuery);
+  var result = [days, eps, shows, yearGraph];
+  //var result = days.concat(eps).concat(shows).concat(yearGraph);
+  console.log(result);
+  res.send(result); 
+});
 
 
 

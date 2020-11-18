@@ -24,7 +24,7 @@ twoVar : async function (x, y, q)
 ,
 
 
-signupAccount : async function (x, q)
+oneVar : async function (x, q)
 {
   const mysqlx      = require('@mysql/xdevapi');
 
