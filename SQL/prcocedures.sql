@@ -63,6 +63,8 @@ DROP PROCEDURE IF EXISTS getDays;
 DROP PROCEDURE IF EXISTS getTotalShows;
 DROP PROCEDURE IF EXISTS getTotalEpisodes;
 DROP PROCEDURE IF EXISTS getYearGraph;
+DROP PROCEDURE IF EXISTS getGenreGraph;
+DROP PROCEDURE IF EXISTS getSourceGraph;
 DELIMITER %%
 CREATE PROCEDURE loginInfo(p_username VARCHAR(50), p_password VARCHAR(50) )
 READS SQL DATA
@@ -148,21 +150,56 @@ BEGIN
     WHERE users.user_id = entries.user_id
     AND entries.anime_id = myanimelist.anime_id
     AND users.user_id = p_id
+	AND my_status = 2
     GROUP BY aired_from_year
     ORDER BY aired_from_year ASC;
+    
+END%%
+
+CREATE PROCEDURE getGenreGraph(p_id INT)
+READS SQL DATA
+BEGIN
+	SELECT genre_lookup.genre, count(*) AS frequency
+    FROM myanimelist, entries, users, genre_lookup
+    WHERE users.user_id = entries.user_id
+    AND entries.anime_id = myanimelist.anime_id
+    AND myanimelist.anime_id = genre_lookup.anime_id
+    AND users.user_id = p_id
+	AND my_status = 2
+    GROUP BY genre_lookup.genre
+    ORDER BY frequency DESC
+    LIMIT 5;
+    
+END%%
+
+CREATE PROCEDURE getSourceGraph(p_id INT)
+READS SQL DATA
+BEGIN
+	SELECT source_material, COUNT(*)
+    FROM myanimelist, entries, users
+    WHERE users.user_id = entries.user_id
+    AND entries.anime_id = myanimelist.anime_id
+    AND users.user_id = p_id
+	AND my_status = 2
+    GROUP BY source_material
+    ORDER BY COUNT(*) DESC
+    Limit 6;
     
 END%%
 DELIMITER ;
    
    
    
-   
-CALL loginInfo('Chris27153', 28778 );   
+CALL loginInfo('Chris27153', 248778 );   
 CALL signupAccount('Chris2715', 248778 );   
 CALL getDays(1);
 CALL getTotalShows(1);
 CALL getTotalEpisodes(1);
 CALL getYearGraph(1);
+CALL getGenreGraph(1);
+CALL getSourceGraph(1);
+
+
     
     
     

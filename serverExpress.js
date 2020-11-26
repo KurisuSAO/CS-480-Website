@@ -9,6 +9,8 @@ var getDaysQuery = 'CALL getDays(?)';
 var getTotalShowsQuery = 'CALL getTotalShows(?)';
 var getTotalEpisodesQuery = 'CALL getTotalEpisodes(?)';
 var getYearGraphQuery = 'CALL getYearGraph(?)';
+var getGenreGraphQuery = 'CALL getGenreGraph(?)';
+var getSourceGraphQuery = 'CALL getSourceGraph(?)';
 
 const {twoVar, oneVar} = require('./runthis.js');
 var bodyParser = require('body-parser');
@@ -70,7 +72,9 @@ app.post('/profile.html/days', urlencodedParser, async function(req, res) {
   var eps = await oneVar(curID, getTotalEpisodesQuery);
   var shows = await oneVar(curID, getTotalShowsQuery);
   var yearGraph = await oneVar(curID, getYearGraphQuery);
-  var result = [days, eps, shows, yearGraph];
+  var genreGraph = await oneVar(curID, getGenreGraphQuery);
+  var sourceGraph = await oneVar(curID, getSourceGraphQuery);
+  var result = [days, eps, shows, yearGraph, genreGraph, sourceGraph];
   //var result = days.concat(eps).concat(shows).concat(yearGraph);
   console.log(result);
   res.send(result); 
