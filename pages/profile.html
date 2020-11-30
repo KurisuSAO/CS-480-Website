@@ -92,6 +92,22 @@
                 <!-- <a href="#" class="btn btn-light" id="btnList">List</a> -->
                 <button type="button" class="btn btn-info " id="btnList">My List</button>
           </li>
+          <li>
+
+            <form id="searchInfo">
+
+              <div class="form-group">
+
+                <label for="searchOption">Search:</label>
+                <input class="form-control" id="fsearch">
+
+              </div>
+
+              <button type="button" class="btn btn-light" id="btnSearch">Search</button>
+
+            </form>
+
+          </li>
         </ul>
       </div> 
 
@@ -106,7 +122,7 @@
         window.location.href = "/" 
   });
 
-
+//-----------------------------------------------------------------------------------------------------------------
   //what happens as soon as page loads
   $(document).ready(function()
   {
@@ -131,6 +147,19 @@
     });
 
   });
+
+  document.getElementById("btnSearch").addEventListener("click", function(){
+
+    var searchElement = document.getElementById("fsearch").value;
+    sessionStorage.setItem("searchItem", searchElement);
+
+    //window.alert(searchElement);
+
+    window.location.href = "/search.html" 
+
+  });
+
+  //-----------------------------------------------------------------------------------------------------------------
 
   function makeYearGraph(tuple){
       var x = [];

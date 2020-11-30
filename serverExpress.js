@@ -11,6 +11,7 @@ var getTotalEpisodesQuery = 'CALL getTotalEpisodes(?)';
 var getYearGraphQuery = 'CALL getYearGraph(?)';
 var getGenreGraphQuery = 'CALL getGenreGraph(?)';
 var getSourceGraphQuery = 'CALL getSourceGraph(?)';
+var getSearchQuery = 'CALL getSearch(?)';
 
 const {twoVar, oneVar} = require('./runthis.js');
 var bodyParser = require('body-parser');
@@ -28,6 +29,9 @@ app.get('/signup.html', function (req, res) {
 })
 app.get('/profile.html', function (req, res) {
   res.sendFile(path.join(__dirname + '/pages/profile.html'))
+})
+app.get('/search.html', function (req, res) {
+  res.sendFile(path.join(__dirname + '/pages/search.html'))
 })
 
 //stylesheets
@@ -78,6 +82,16 @@ app.post('/profile.html/days', urlencodedParser, async function(req, res) {
   //var result = days.concat(eps).concat(shows).concat(yearGraph);
   console.log(result);
   res.send(result); 
+});
+//Use to get search Results
+app.post('/search.html/days', urlencodedParser, async function(req, res) { 
+
+  var curID = (req.body.id); 
+
+  var searchResult = await oneVar(curID, getSearchQuery);
+  
+  console.log(searchResult);
+  res.send(searchResult); 
 });
 
 

@@ -65,6 +65,8 @@ DROP PROCEDURE IF EXISTS getTotalEpisodes;
 DROP PROCEDURE IF EXISTS getYearGraph;
 DROP PROCEDURE IF EXISTS getGenreGraph;
 DROP PROCEDURE IF EXISTS getSourceGraph;
+DROP PROCEDURE IF EXISTS getSearch;
+
 DELIMITER %%
 CREATE PROCEDURE loginInfo(p_username VARCHAR(50), p_password VARCHAR(50) )
 READS SQL DATA
@@ -186,6 +188,14 @@ BEGIN
     Limit 6;
     
 END%%
+
+CREATE PROCEDURE getSearch(p_id INT)
+READS SQL DATA
+BEGIN
+    SELECT title, score, rank_num, airing, anime_id, source_material
+    FROM myanimelist
+    WHERE score = p_id;
+END%%
 DELIMITER ;
    
    
@@ -198,6 +208,8 @@ CALL getTotalEpisodes(1);
 CALL getYearGraph(1);
 CALL getGenreGraph(1);
 CALL getSourceGraph(1);
+
+CALL getSearch(1);
 
 
     
