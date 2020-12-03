@@ -189,12 +189,12 @@ BEGIN
     
 END%%
 
-CREATE PROCEDURE getSearch(p_id INT)
+CREATE PROCEDURE getSearch(p_id VARCHAR(50))
 READS SQL DATA
 BEGIN
     SELECT title, score, rank_num, airing, anime_id, source_material
     FROM myanimelist
-    WHERE score = p_id;
+    WHERE title LIKE CONCAT(p_id , '%');
 END%%
 DELIMITER ;
    
@@ -209,7 +209,7 @@ CALL getYearGraph(1);
 CALL getGenreGraph(1);
 CALL getSourceGraph(1);
 
-CALL getSearch(1);
+--CALL getSearch(1);
 
 
     
