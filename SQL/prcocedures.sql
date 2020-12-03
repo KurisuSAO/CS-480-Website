@@ -66,6 +66,7 @@ DROP PROCEDURE IF EXISTS getYearGraph;
 DROP PROCEDURE IF EXISTS getGenreGraph;
 DROP PROCEDURE IF EXISTS getSourceGraph;
 DROP PROCEDURE IF EXISTS getSearch;
+DROP PROCEDURE IF EXISTS addToList;
 
 DELIMITER %%
 CREATE PROCEDURE loginInfo(p_username VARCHAR(50), p_password VARCHAR(50) )
@@ -112,6 +113,41 @@ acc: BEGIN
 	SELECT idNum;
 	
 	
+END%%
+
+CREATE PROCEDURE addToList(p_title VARCHAR(50), p_identification INT, p_status INT, p_watched INT, p_score INT)
+READS SQL DATA
+BEGIN
+	DECLARE mVariable1 INT;
+    DECLARE mVariable2 INT;
+    
+    -- Get Anime ID
+    SELECT anime_id INTO mVariable1
+    FROM myanimelist 
+    WHERE title = p_title;
+    
+    -- Check If Show Is In List
+    SELECT COUNT(*) INTO mVariable2
+    FROM entries
+    WHERE anime_id = mVariable1;
+    IF mVariable1 > 0
+    THEN
+		-- Update
+        UPDATE entries
+        SET my_watched_episodes = p_watched, my_score = p_score, my_status = p_status
+        WHERE anime_id = mVariable1;
+        
+        -- Return
+        SELECT 'Update';
+	ELSE
+		-- Insert
+        INSERT INTO entries(user_id, anime_id, my_watched_episodes, my_score, my_status)
+        VALUE(p_identification, mVariable1, p_watched, p_score, p_status);
+        
+        -- Return
+        SELECT 'Insert';
+	END IF;
+		
 END%%
 
 CREATE PROCEDURE getDays(p_id INT)
@@ -192,9 +228,12 @@ END%%
 CREATE PROCEDURE getSearch(p_id VARCHAR(50))
 READS SQL DATA
 BEGIN
-    SELECT title, score, rank_num, airing, anime_id, source_material
-    FROM myanimelist
-    WHERE title LIKE CONCAT(p_id , '%');
+    SELECT myanimelist.title, myanimelist.episodes, myanimelist.score, myanimelist.aired_from_year, genre_lookup.genre, myanimelist.studio
+	FROM myanimelist
+	JOIN genre_lookup
+	ON myanimelist.anime_id = genre_lookup.anime_id
+	WHERE title LIKE CONCAT(p_id , '%')
+	GROUP BY genre_lookup.anime_id;
 END%%
 DELIMITER ;
    
@@ -209,7 +248,7 @@ CALL getYearGraph(1);
 CALL getGenreGraph(1);
 CALL getSourceGraph(1);
 
---CALL getSearch(1);
+-- CALL getSearch(1);
 
 
     
