@@ -20,8 +20,7 @@ twoVar : async function (x, y, q)
 	return result.fetchAll();
  });
  return mySession;
-}
-,
+},
 
 
 oneVar : async function (x, q)
@@ -40,6 +39,25 @@ oneVar : async function (x, q)
  })
  .then(result => {
 	return result.fetchAll();
+ });
+ return mySession;
+},
+fiveVar : async function (a, b, c, d, e, q)
+{
+  const mysqlx      = require('@mysql/xdevapi');
+
+  // Connect to server using a connection URL
+  var mySession = mysqlx.getSession( {
+   host: 'localhost', port: 33060,
+   user: 'root', password: '248778',
+   schema:'anime_project'} )
+   .then (session =>{
+     
+   var myResult = session.sql(q).bind(a, b, c, d, e).execute();
+   return myResult
+ })
+ .then(result => {
+  return result.fetchAll();
  });
  return mySession;
 }

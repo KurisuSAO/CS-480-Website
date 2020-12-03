@@ -13,7 +13,7 @@ var getGenreGraphQuery = 'CALL getGenreGraph(?)';
 var getSourceGraphQuery = 'CALL getSourceGraph(?)';
 var getSearchQuery = 'CALL getSearch(?)';
 
-const {twoVar, oneVar} = require('./runthis.js');
+const {twoVar, oneVar, fiveVar} = require('./runthis.js');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 
