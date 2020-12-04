@@ -67,6 +67,8 @@ DROP PROCEDURE IF EXISTS getGenreGraph;
 DROP PROCEDURE IF EXISTS getSourceGraph;
 DROP PROCEDURE IF EXISTS getSearch;
 DROP PROCEDURE IF EXISTS addToList;
+DROP PROCEDURE IF EXISTS getUserData;
+DROP PROCEDURE IF EXISTS deleteUserData;
 
 DELIMITER %%
 CREATE PROCEDURE loginInfo(p_username VARCHAR(50), p_password VARCHAR(50) )
@@ -129,8 +131,8 @@ BEGIN
     -- Check If Show Is In List
     SELECT COUNT(*) INTO mVariable2
     FROM entries
-    WHERE anime_id = mVariable1;
-    IF mVariable1 > 0
+    WHERE anime_id = mVariable1 AND user_id = p_identification;
+    IF mVariable2 > 0
     THEN
 		-- Update
         UPDATE entries
@@ -235,6 +237,54 @@ BEGIN
 	WHERE title LIKE CONCAT(p_id , '%')
 	GROUP BY genre_lookup.anime_id;
 END%%
+
+CREATE PROCEDURE getUserData(p_id INT)
+READS SQL DATA
+BEGIN
+	SELECT myanimelist.title, myanimelist.rank_num, myanimelist.media_type, entries.my_watched_episodes, entries.my_score,
+	CASE 
+		WHEN entries.my_status = 1 THEN 'Currently Watching'
+		WHEN entries.my_status = 2 THEN 'Completed'
+		WHEN entries.my_status = 3 THEN 'On Hold'
+		WHEN entries.my_status = 4 THEN 'Dropped'
+		WHEN entries.my_status = 6 THEN 'Plan to Watch'
+		ELSE 'None'
+	END AS 'Status', myanimelist.episodes
+	FROM entries
+	JOIN myanimelist
+	ON myanimelist.anime_id = entries.anime_id
+	WHERE entries.user_id = p_id
+	ORDER BY entries.my_status ASC, myanimelist.title ASC;
+END%%
+
+CREATE PROCEDURE deleteUserData(p_title VARCHAR(50), p_id INT)
+READS SQL DATA
+BEGIN
+	DECLARE mOne INT;
+    DECLARE mTwo INT;
+    
+    -- Get Anime ID
+    SELECT anime_id INTO mOne
+    FROM myanimelist 
+    WHERE title = p_title;
+    
+    SELECT COUNT(*) INTO mTwo
+    FROM entries
+    WHERE anime_id = mOne AND user_id = p_id;
+    IF mTwo > 0
+	THEN
+		-- Remove
+        DELETE FROM entries 
+        WHERE anime_id = mOne AND user_id = p_id;
+        
+        -- Return
+        SELECT 'Removed';
+	ELSE
+        -- Return
+        SELECT 'Remove Failed';
+	END IF;
+END%%
+
 DELIMITER ;
    
    

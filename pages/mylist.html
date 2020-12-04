@@ -31,7 +31,38 @@
       </div>
       <div class="modal-body">
 
+        
+        <div class="row py-md-3">
 
+            <div class="col-sm-4">
+             <div class="card bg-light">
+               <div class="card-header">Current Score</div>
+               <div css="card-body">
+                  <canvas id="currentScore" height="60"></canvas>
+               </div>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="card bg-light">
+                  <div class="card-header">Current Status</div>
+                  <div css="card-body">
+                     <canvas id="currentStatus" height="60"></canvas>
+                  </div>
+                 </div>
+               </div>
+
+               <div class="col-sm-4">
+                <div class="card bg-light">
+                  <div class="card-header">Episodes Watched</div>
+                  <div css="card-body">
+                    <canvas id="currentEpisodes" height="60"></canvas>
+                  </div>
+                 </div>
+               </div>
+        </div>
+      
+        
         <form>
 
           <div class="form-group">
@@ -106,14 +137,15 @@
           
 
         </form>
+    
 
 
 
       </div>
       <div class="modal-footer">
 
-        <button type="button" class="btn btn-primary" id="btnAdd">Add</button>
-        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="btnAdd">Update</button>
+        <button type="button" class="btn btn-danger" id="btnRemove">Remove</button>
 
       </div>
     </div>
@@ -126,11 +158,11 @@
         <thead>
             <tr>
                 <th>Title</th>
-                <th>Episodes</th>
+                <th>Rank</th>
+                <th>Type</th>
+                <th>Episodes Watched</th>
                 <th>Score</th>
-                <th>Year Aired</th>
-                <th>Genre</th>
-                <th>Studio</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -138,17 +170,17 @@
         <tfoot>
             <tr>
                 <th>Title</th>
-                <th>Episodes</th>
+                <th>Rank</th>
+                <th>Type</th>
+                <th>Episodes Watched</th>
                 <th>Score</th>
-                <th>Year Aired</th>
-                <th>Genre</th>
-                <th>Studio</th>
+                <th>Status</th>
             </tr>
         </tfoot>
     </table>
 
     <button type="button" class="btn btn-success" id="btnSelect">Select</button>
-    <button type="button" class="btn btn-danger" id="sAgain">Return</button>
+    <button type="button" class="btn btn-warning" id="sAgain">Profile</button>
 
 </div>
 
@@ -182,18 +214,32 @@
       var showIndex = -99;
       var show;
 
+      var m1 = document.getElementById("currentScore");
+      var c1 = m1.getContext("2d");
+      c1.font = "30px Helvetica";
+
+      var m2 = document.getElementById("currentStatus");
+      var c2 = m2.getContext("2d");
+      c2.font = "20px Helvetica";
+      
+      var m3 = document.getElementById("currentEpisodes");
+      var c3 = m3.getContext("2d");
+      c3.font = "30px Helvetica";
+
+
+
       //what happens as soon as page loads
       $(document).ready(function()
       {
               //Get the global variable 
-              var searchID = sessionStorage.getItem("searchItem");
+              var searchID = sessionStorage.getItem("curID");
               var input = {id: searchID};
 
 
           $.ajax({
               //Post data query work
               type: 'POST',
-              url: '/search.html/days',
+              url: '/mylist.html/days',
               data: input,
     
                   success: function(data){
@@ -240,13 +286,16 @@
             //console.log(showIndex);
 
             current = show[showIndex];
-            var showEpNum = current[1];
+            var showEpNum = current[6];
 
             $("#animeModal").modal();
             document.getElementById("modalTitle").innerHTML = current[0];
-
-
             document.getElementById("outOf").innerHTML = "/" + showEpNum;
+
+            c1.fillText("          " + current[4],10,50);
+            c2.fillText("    " + current[5],10,50);
+            c3.fillText("          " + current[3],10,50);
+
         });
 
         document.getElementById("sAgain").addEventListener("click", function(){
@@ -254,6 +303,46 @@
           window.location.href = "/profile.html"
         });
 
+
+        function listRemove(mA, mB)
+        {
+            var mAa = mA;
+            var mBb = mB;
+
+            var input = {a: mAa, b: mBb};
+
+            $.ajax({
+              
+              type: 'POST',
+              url: '/mylist.html/weeks',
+              data: input,
+    
+                  success: function(data){
+                      
+                    //alert(data);
+                    console.log(data);
+
+                  }
+              });
+
+
+        }
+
+        document.getElementById("btnRemove").addEventListener("click", function(){
+
+
+            var mShow = show[showIndex]; //Get Show Title
+            var mUser = sessionStorage.getItem("curID"); //Get User ID
+
+            listRemove(mShow[0], mUser);
+
+
+            $('#animeModal').modal('hide');
+            alert("Show Removed From List!");
+            //location.reload()
+        });
+
+    
         function searchInsert(mA, mB, mC, mD, mE)
         {
             var mAa = mA;
@@ -274,9 +363,7 @@
                   success: function(data){
                       
                     //alert(data);
-                    console.log(data[0]);
-
-                    setUorI(data[0]);
+                    console.log(data);
 
                   }
               });
@@ -292,22 +379,28 @@
           var mScores = document.getElementById("scoreText").value; //Get Show Score
           var mUser = sessionStorage.getItem("curID"); // Get User ID
 
-          console.log("Anime Title: " + mShow[0]);
-          console.log("User ID: " + mUser);
-          console.log("Status: " + mStatus);
-          console.log("Episodes: " + mEpisodes);
-          console.log("Score: " + mScores);
+          //console.log("Anime Title: " + mShow[0]);
+          //console.log("User ID: " + mUser);
+          //console.log("Status: " + mStatus);
+          //console.log("Episodes: " + mEpisodes);
+          //console.log("Score: " + mScores);
 
           searchInsert(mShow[0], mUser, mStatus, mEpisodes, mScores);
 
             $('#animeModal').modal('hide');
-
+            alert("Show Was Updated!");
+            //location.reload()
           });
         
           $('#animeModal').on('hidden.bs.modal', function (e) {
             console.log("Cleaned");
 
             $(this).find('form').trigger('reset');
+
+            c1.clearRect(0, 0, m1.width, m1.height);
+            c2.clearRect(0, 0, m3.width, m2.height);
+            c3.clearRect(0, 0, m3.width, m3.height);
+
           })
 
       </script>

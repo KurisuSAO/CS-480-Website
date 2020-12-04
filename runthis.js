@@ -9,7 +9,7 @@ twoVar : async function (x, y, q)
   // Connect to server using a connection URL
   var mySession = mysqlx.getSession( {
    host: 'localhost', port: 33060,
-   user: 'root', password: '248778',
+   user: 'root', password: 'Cosmos.Red.11.',
    schema:'anime_project'} )
    .then (session =>{
      
@@ -30,7 +30,7 @@ oneVar : async function (x, q)
   // Connect to server using a connection URL
   var mySession = mysqlx.getSession( {
    host: 'localhost', port: 33060,
-   user: 'root', password: '248778',
+   user: 'root', password: 'Cosmos.Red.11.',
    schema:'anime_project'} )
    .then (session =>{
      
@@ -42,6 +42,7 @@ oneVar : async function (x, q)
  });
  return mySession;
 },
+
 fiveVar : async function (a, b, c, d, e, q)
 {
   const mysqlx      = require('@mysql/xdevapi');
@@ -49,7 +50,7 @@ fiveVar : async function (a, b, c, d, e, q)
   // Connect to server using a connection URL
   var mySession = mysqlx.getSession( {
    host: 'localhost', port: 33060,
-   user: 'root', password: '248778',
+   user: 'root', password: 'Cosmos.Red.11.',
    schema:'anime_project'} )
    .then (session =>{
      

@@ -12,6 +12,9 @@ var getYearGraphQuery = 'CALL getYearGraph(?)';
 var getGenreGraphQuery = 'CALL getGenreGraph(?)';
 var getSourceGraphQuery = 'CALL getSourceGraph(?)';
 var getSearchQuery = 'CALL getSearch(?)';
+var getUpdateQuery = 'CALL addToList(?,?,?,?,?)';
+var getUserQuery = 'CALL getUserData(?)';
+var deleteUserPick = 'CALL deleteUserData(?,?)'
 
 const {twoVar, oneVar, fiveVar} = require('./runthis.js');
 var bodyParser = require('body-parser');
@@ -22,7 +25,6 @@ var urlencodedParser = bodyParser.urlencoded({extended: false});
 //Pages
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/index.html'))
-
 })
 app.get('/signup.html', function (req, res) {
   res.sendFile(path.join(__dirname + '/pages/signup.html'))
@@ -32,6 +34,9 @@ app.get('/profile.html', function (req, res) {
 })
 app.get('/search.html', function (req, res) {
   res.sendFile(path.join(__dirname + '/pages/search.html'))
+})
+app.get('/mylist.html', function (req, res) {
+  res.sendFile(path.join(__dirname + '/pages/mylist.html'))
 })
 
 //stylesheets
@@ -83,6 +88,31 @@ app.post('/profile.html/days', urlencodedParser, async function(req, res) {
   console.log(result);
   res.send(result); 
 });
+
+//Use to get user data
+app.post('/mylist.html/days', urlencodedParser, async function(req, res) { 
+
+  var curID = (req.body.id); 
+
+  var userResult = await oneVar(curID, getUserQuery);
+  
+  console.log(userResult);
+  res.send(userResult); 
+});
+
+//Use to remove shows from list
+app.post('/mylist.html/weeks', urlencodedParser, async function(req, res) { 
+
+  var ma = (req.body.a);
+  var mb = (req.body.b);
+
+  var deleteResult= await twoVar(ma, mb, deleteUserPick);
+
+  console.log(deleteResult);
+  res.send(deleteResult);
+  
+});
+
 //Use to get search Results
 app.post('/search.html/days', urlencodedParser, async function(req, res) { 
 
@@ -94,6 +124,20 @@ app.post('/search.html/days', urlencodedParser, async function(req, res) {
   res.send(searchResult); 
 });
 
+//Use to insert/update user list data 
+app.post('/search.html/weeks', urlencodedParser, async function(req, res) {
 
+  var ma = (req.body.a);
+  var mb = (req.body.b);
+  var mc = (req.body.c);
+  var md = (req.body.d);
+  var me = (req.body.e);
+
+  var insertResult = await fiveVar(ma, mb, mc, md, me, getUpdateQuery);
+
+  console.log(insertResult);
+  res.send(insertResult);
+
+});
 
 app.listen(3000)
