@@ -99,7 +99,11 @@
                 <!-- <a href="#" class="btn btn-light" id="btnList">List</a> -->
                 <button type="button" class="btn btn-info " id="btnList">My List</button>
           </li>
-          
+          <li>
+
+            <button type="button" class="btn btn-warning" id="btnLogOut">Log Out</button>
+
+          </li>
         </ul>
       </div> 
 
@@ -108,7 +112,9 @@
   </body>
   <script>
 
-
+  document.getElementById("btnLogOut").addEventListener("click", function(){
+        window.location.href = "/" 
+  });
 
   document.getElementById("btnList").addEventListener("click", function(){
         window.location.href = "/mylist.html" 
