@@ -1,2 +1,7 @@
 # CS-480-Website
-DataBase Instructions
+
+# Installing Database Instructions
+
+# Installing Application Instructions 
+
+# Runing Application Instructions
