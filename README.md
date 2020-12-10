@@ -12,7 +12,7 @@
 - On lines 12, 33, and 53 change the password to your own 
 MySQL workbench root password. 
 
-# Runing Application Instructions
+# Running Application Instructions
 
 - Open Command Prompt 
 - Change directory to the project folder
